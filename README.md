@@ -14,14 +14,14 @@ Game obrolan pasangan LDR yang mobile-first. UI dan bank pertanyaan berada dalam
    ```
 
    Buka `http://localhost:3000`. Status di kartu awal akan menunjukkan **Supabase siap terhubung** jika file env sudah terisi.
-5. Untuk main dari dua HP yang berjauhan, deploy folder ini ke hosting yang bisa menjalankan Node.js. Atur `SUPABASE_URL` dan `SUPABASE_PUBLISHABLE_KEY` di bagian Environment Variables hosting tersebut, lalu bagikan URL situsnya. Jangan deploy `.env.local`.
+5. Untuk main dari dua HP yang berjauhan, deploy folder ini ke hosting yang bisa menjalankan Node.js. Atur `SUPABASE_URL` dan `SUPABASE_PUBLISHABLE_KEY` di bagian Environment Variables hosting tersebut, lalu bagikan URL situsnya. Jangan deploy `.env.local`. Setelah mengubah `setup.sql`, jalankan ulang seluruh file di SQL Editor sebelum deploy versi aplikasi yang baru.
 6. Pemain pertama pilih nama/avatar lalu **Buat room**. Bagikan kode enam karakter ke pasangan. Pemain kedua masukkan nama/avatar dan kode lalu pilih **Gabung pakai kode**.
 
 > Room menerima maksimal dua kursi. Kode saja belum cukup untuk membaca/menulis room setelah bergabung: setiap perangkat juga menyimpan token sesi acak. Jangan bagikan kode secara publik. Untuk demo tanpa setup backend, pilih **Coba demo**; demo disimpan lokal dan tidak tersinkron ke HP lain.
 
 ## Cara main
 
-Pilih salah satu dari delapan mode. Tombol sinkron/asinkron mengatur tempo bermain; jawaban, progres, XP, streak, album, dan Memory Jar tersimpan di room. Koneksi room diperbarui otomatis tiap beberapa detik. Browser menyimpan token untuk lanjut setelah ditutup dan dibuka lagi.
+Pilih salah satu mode obrolan, kreatif, atau mini-game. Tombol sinkron/asinkron mengatur tempo bermain; jawaban, progres, XP, streak, album, dan Memory Jar tersimpan di room. Koneksi room diperbarui otomatis tiap beberapa detik. Browser menyimpan token untuk lanjut setelah ditutup dan dibuka lagi.
 
 Mode Generate pertanyaan menyiapkan prompt sesuai kategori dan mood untuk disalin ke AI pilihanmu; versi ini tidak mengirim data ke layanan AI.
 
@@ -41,3 +41,4 @@ Angka kedalaman: `1` ringan, `2` sedang, `3` dalam. Kategori **Deep** bisa dimat
 - Tautan Supabase JS dan font dimuat dari CDN, sehingga koneksi internet dibutuhkan.
 - Voice note/foto dikirim melalui aplikasi chat pilihan kalian; game menyediakan kolom catatan/tautan, bukan penyimpanan media.
 - Backend memakai polling berkala, bukan koneksi real-time push.
+- Jalankan `npm test` untuk tes aturan seleksi pertanyaan, transisi sesi, giliran, Tic-Tac-Toe, dan Ular Tangga.
