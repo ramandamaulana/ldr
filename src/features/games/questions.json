@@ -1,0 +1,576 @@
+{
+  "🍕 Receh & Random": [
+    {
+      "q": "Kalau kamu jadi topping pizza, topping apa dan kenapa?",
+      "d": 1
+    },
+    {
+      "q": "Camilan yang diam-diam selalu kamu cari?",
+      "d": 1
+    },
+    {
+      "q": "Tim bubur diaduk atau nggak diaduk?",
+      "d": 1
+    },
+    {
+      "q": "Kalau punya suara efek masuk ruangan, bunyinya apa?",
+      "d": 1
+    },
+    {
+      "q": "Nama paling lucu buat tanaman peliharaan?",
+      "d": 1
+    },
+    {
+      "q": "Makanan yang kamu bela mati-matian walau banyak yang nggak suka?",
+      "d": 1
+    },
+    {
+      "q": "Kalau sehari jadi kucing, hal pertama yang kamu lakukan?",
+      "d": 1
+    },
+    {
+      "q": "Kebiasaan kecilku yang menurutmu agak ajaib?",
+      "d": 1
+    },
+    {
+      "q": "Emoji yang paling menggambarkan mood kamu sekarang?",
+      "d": 1
+    },
+    {
+      "q": "Kalau kita punya maskot, hewan apa yang cocok?",
+      "d": 1
+    },
+    {
+      "q": "Pilih: bersin tiap dengar lagu dangdut atau cegukan tiap lihat kucing?",
+      "d": 1
+    },
+    {
+      "q": "Benda paling random di tas atau dekat tempat tidurmu?",
+      "d": 1
+    },
+    {
+      "q": "Kombinasi makanan aneh yang ternyata enak?",
+      "d": 1
+    },
+    {
+      "q": "Kalau hidupmu punya judul sinetron, apa judulnya?",
+      "d": 1
+    },
+    {
+      "q": "Hal receh apa yang selalu bikin kamu ketawa?",
+      "d": 2
+    },
+    {
+      "q": "Momen paling absurd yang terjadi minggu ini?",
+      "d": 2
+    },
+    {
+      "q": "Kalau bisa menghapus satu kata dari dunia, kata apa?",
+      "d": 2
+    },
+    {
+      "q": "Apa teori konspirasi paling konyol yang kamu karang sendiri?",
+      "d": 2
+    },
+    {
+      "q": "Kebiasaan aneh apa yang susah kamu jelaskan ke orang lain?",
+      "d": 2
+    },
+    {
+      "q": "Hal konyol apa yang ingin kita lakukan bareng suatu hari?",
+      "d": 2
+    }
+  ],
+  "🎬 Hobi & Hiburan": [
+    {
+      "q": "Lagu yang akhir-akhir ini paling sering kamu putar?",
+      "d": 1
+    },
+    {
+      "q": "Film comfort yang bisa kamu tonton berkali-kali?",
+      "d": 1
+    },
+    {
+      "q": "Game yang paling pengin kamu mainkan bareng aku?",
+      "d": 1
+    },
+    {
+      "q": "Karakter kartun yang energinya mirip kamu?",
+      "d": 1
+    },
+    {
+      "q": "Kalau karaoke, lagu andalanmu apa?",
+      "d": 1
+    },
+    {
+      "q": "Genre film yang paling gampang bikin kamu betah?",
+      "d": 1
+    },
+    {
+      "q": "Konten internet apa yang belakangan bikin kamu ngakak?",
+      "d": 1
+    },
+    {
+      "q": "Pilih nonton film atau main game buat quality time?",
+      "d": 1
+    },
+    {
+      "q": "Album atau lagu yang cocok jadi soundtrack minggu ini?",
+      "d": 1
+    },
+    {
+      "q": "Buku, film, atau serial apa yang pengin kamu rekomendasikan ke aku?",
+      "d": 1
+    },
+    {
+      "q": "Kalau bisa belajar satu alat musik, kamu pilih apa?",
+      "d": 1
+    },
+    {
+      "q": "Karakter fiksi yang ingin kamu ajak makan malam?",
+      "d": 2
+    },
+    {
+      "q": "Lagu apa yang mengingatkanmu pada masa kecil?",
+      "d": 2
+    },
+    {
+      "q": "Hobi apa yang bikin kamu lupa waktu?",
+      "d": 2
+    },
+    {
+      "q": "Kalau kita bikin playlist berdua, judulnya apa?",
+      "d": 2
+    },
+    {
+      "q": "Cerita fiksi apa yang paling membekas buatmu?",
+      "d": 2
+    },
+    {
+      "q": "Karya apa yang pernah mengubah cara pandangmu?",
+      "d": 2
+    },
+    {
+      "q": "Game co-op apa yang menggambarkan kerja sama kita?",
+      "d": 2
+    },
+    {
+      "q": "Tokoh cerita yang kamu rasa paling kamu pahami?",
+      "d": 2
+    },
+    {
+      "q": "Pengalaman hiburan apa yang ingin kita alami langsung bareng?",
+      "d": 2
+    }
+  ],
+  "🏠 Sehari-hari": [
+    {
+      "q": "Sarapan favorit saat hari santai?",
+      "d": 1
+    },
+    {
+      "q": "Waktu paling enak buat ngobrol: pagi, sore, atau malam?",
+      "d": 1
+    },
+    {
+      "q": "Hal kecil apa yang bikin harimu sedikit lebih baik?",
+      "d": 1
+    },
+    {
+      "q": "Rutinitas yang paling kamu tunggu setiap hari?",
+      "d": 1
+    },
+    {
+      "q": "Minuman yang paling pas buat nemenin kamu sekarang?",
+      "d": 1
+    },
+    {
+      "q": "Kalau punya satu jam kosong, kamu biasanya ngapain?",
+      "d": 1
+    },
+    {
+      "q": "Cuaca yang paling bikin mood kamu naik?",
+      "d": 1
+    },
+    {
+      "q": "Hal pertama yang kamu lakukan setelah bangun tidur?",
+      "d": 1
+    },
+    {
+      "q": "Pojok rumah favoritmu itu yang mana?",
+      "d": 1
+    },
+    {
+      "q": "Lagu apa yang cocok jadi alarm pagi?",
+      "d": 1
+    },
+    {
+      "q": "Hal apa yang akhir-akhir ini bikin kamu bangga sama diri sendiri?",
+      "d": 2
+    },
+    {
+      "q": "Bagian hari yang terasa paling berat belakangan ini?",
+      "d": 2
+    },
+    {
+      "q": "Cara paling enak buat recharge setelah hari panjang?",
+      "d": 2
+    },
+    {
+      "q": "Aku bisa bantu bikin harimu lebih ringan dengan cara apa?",
+      "d": 2
+    },
+    {
+      "q": "Apa yang pengin kamu rayakan minggu ini, sekecil apa pun?",
+      "d": 2
+    },
+    {
+      "q": "Hal sederhana apa yang pengin lebih sering kamu lakukan?",
+      "d": 2
+    },
+    {
+      "q": "Kapan terakhir kali kamu merasa benar-benar tenang?",
+      "d": 2
+    },
+    {
+      "q": "Satu hal yang pengin kamu punya lebih banyak waktu untuknya?",
+      "d": 2
+    },
+    {
+      "q": "Perhatian kecil seperti apa yang terasa berarti buatmu?",
+      "d": 2
+    },
+    {
+      "q": "Apa yang belakangan sering memenuhi pikiranmu?",
+      "d": 3
+    }
+  ],
+  "💭 Kenangan": [
+    {
+      "q": "Kenangan masa kecil yang masih sering kamu ceritakan?",
+      "d": 1
+    },
+    {
+      "q": "Hadiah kecil paling berkesan yang pernah kamu terima?",
+      "d": 1
+    },
+    {
+      "q": "Momen sekolah yang sekarang terasa lucu?",
+      "d": 1
+    },
+    {
+      "q": "Perjalanan yang paling kamu ingat sampai sekarang?",
+      "d": 1
+    },
+    {
+      "q": "Lagu yang langsung membawamu ke kenangan tertentu?",
+      "d": 1
+    },
+    {
+      "q": "Makanan yang mengingatkanmu pada rumah?",
+      "d": 1
+    },
+    {
+      "q": "Kesan pertamamu waktu kita mulai ngobrol?",
+      "d": 1
+    },
+    {
+      "q": "Momen bareng kita yang paling bikin kamu ketawa?",
+      "d": 1
+    },
+    {
+      "q": "Hal pertama yang kamu ingat dari kencan atau obrolan kita?",
+      "d": 1
+    },
+    {
+      "q": "Foto kita yang paling kamu suka ceritanya?",
+      "d": 1
+    },
+    {
+      "q": "Kapan kamu merasa kita mulai makin dekat?",
+      "d": 2
+    },
+    {
+      "q": "Hal kecil dariku yang pernah bikin harimu berubah?",
+      "d": 2
+    },
+    {
+      "q": "Momen sederhana bareng yang pengin kamu ulang?",
+      "d": 2
+    },
+    {
+      "q": "Kenangan apa yang ingin kita simpan lebih banyak?",
+      "d": 2
+    },
+    {
+      "q": "Apa yang dulu kamu khawatirkan tapi ternyata baik-baik saja?",
+      "d": 2
+    },
+    {
+      "q": "Siapa yang pernah mengajarkanmu sesuatu yang kamu pegang sampai kini?",
+      "d": 2
+    },
+    {
+      "q": "Versi dirimu yang dulu akan senang melihat apa dari hidupmu sekarang?",
+      "d": 2
+    },
+    {
+      "q": "Hal yang ingin kamu ucapkan ke dirimu di masa lalu?",
+      "d": 2
+    },
+    {
+      "q": "Momen kapan kamu merasa paling dipahami olehku?",
+      "d": 2
+    },
+    {
+      "q": "Kenangan sulit apa yang sekarang bisa kamu lihat dengan lebih lembut?",
+      "d": 3
+    }
+  ],
+  "🌈 Mimpi & Masa Depan": [
+    {
+      "q": "Kota yang pengin kamu kunjungi bareng aku?",
+      "d": 1
+    },
+    {
+      "q": "Kencan sederhana impianmu kalau kita bertemu besok?",
+      "d": 1
+    },
+    {
+      "q": "Skill baru yang ingin kamu coba tahun ini?",
+      "d": 1
+    },
+    {
+      "q": "Tempat makan yang masuk daftar kunjungan kita?",
+      "d": 1
+    },
+    {
+      "q": "Kalau bisa libur tiga hari, ingin dipakai buat apa?",
+      "d": 1
+    },
+    {
+      "q": "Hal kecil yang pengin kita jadikan tradisi berdua?",
+      "d": 1
+    },
+    {
+      "q": "Pemandangan apa yang ingin kita lihat bersama?",
+      "d": 1
+    },
+    {
+      "q": "Playlist perjalanan kita nanti isinya lagu apa?",
+      "d": 1
+    },
+    {
+      "q": "Aktivitas baru yang ingin kamu coba bareng aku?",
+      "d": 1
+    },
+    {
+      "q": "Suvenir apa yang bakal kamu bawa pulang dari trip impian?",
+      "d": 1
+    },
+    {
+      "q": "Satu hal yang kamu harap bisa kita capai tahun ini?",
+      "d": 2
+    },
+    {
+      "q": "Tempat seperti apa yang kamu sebut rumah?",
+      "d": 2
+    },
+    {
+      "q": "Rutinitas berdua yang ingin kita miliki suatu saat?",
+      "d": 2
+    },
+    {
+      "q": "Bucket list yang paling ingin segera dicentang?",
+      "d": 2
+    },
+    {
+      "q": "Apa arti hidup yang terasa seimbang buatmu?",
+      "d": 2
+    },
+    {
+      "q": "Kalau jarak bukan kendala, hari biasa kita akan seperti apa?",
+      "d": 2
+    },
+    {
+      "q": "Hal apa yang ingin terus kamu pelajari sepanjang hidup?",
+      "d": 2
+    },
+    {
+      "q": "Mimpi mana yang ingin kamu mulai cicil dari sekarang?",
+      "d": 2
+    },
+    {
+      "q": "Apa harapanmu untuk dirimu lima tahun ke depan?",
+      "d": 3
+    },
+    {
+      "q": "Dunia seperti apa yang ingin kita bangun bersama?",
+      "d": 3
+    }
+  ],
+  "💞 Kita Berdua": [
+    {
+      "q": "Hal apa yang paling kamu rindukan saat kita berjauhan?",
+      "d": 1
+    },
+    {
+      "q": "Emoji yang paling menggambarkan hubungan kita?",
+      "d": 1
+    },
+    {
+      "q": "Hal kecil dariku yang selalu bikin kamu senyum?",
+      "d": 1
+    },
+    {
+      "q": "Kalau hubungan kita punya nama playlist, apa judulnya?",
+      "d": 1
+    },
+    {
+      "q": "Siapa yang lebih mungkin mengirim meme jam 2 pagi?",
+      "d": 1
+    },
+    {
+      "q": "Aktivitas virtual apa yang paling seru buat kita?",
+      "d": 1
+    },
+    {
+      "q": "Kebiasaan kita yang paling khas menurutmu?",
+      "d": 1
+    },
+    {
+      "q": "Kata atau panggilan kesukaanmu dariku?",
+      "d": 1
+    },
+    {
+      "q": "Hal lucu tentang kita yang cuma kita pahami?",
+      "d": 1
+    },
+    {
+      "q": "Hal yang pertama kali membuatmu tertarik padaku?",
+      "d": 2
+    },
+    {
+      "q": "Kapan kamu merasa paling dekat denganku walau berjauhan?",
+      "d": 2
+    },
+    {
+      "q": "Apa caraku menunjukkan sayang yang paling terasa buatmu?",
+      "d": 2
+    },
+    {
+      "q": "Apa yang ingin lebih sering kita rayakan?",
+      "d": 2
+    },
+    {
+      "q": "Bagaimana kita bisa bikin obrolan jarak jauh tetap nyaman?",
+      "d": 2
+    },
+    {
+      "q": "Hal apa yang sudah kamu pelajari dariku?",
+      "d": 2
+    },
+    {
+      "q": "Apa satu hal yang selalu ingin kamu ceritakan padaku?",
+      "d": 2
+    },
+    {
+      "q": "Kapan kamu merasa jadi tim yang kompak denganku?",
+      "d": 2
+    },
+    {
+      "q": "Apa yang bikin kamu merasa aman dalam hubungan ini?",
+      "d": 3
+    },
+    {
+      "q": "Apa yang ingin kita jaga baik-baik dalam hubungan kita?",
+      "d": 3
+    },
+    {
+      "q": "Kalau aku lagi jauh dan harimu berat, dukungan seperti apa yang kamu butuhkan?",
+      "d": 3
+    }
+  ],
+  "🌙 Deep": [
+    {
+      "q": "Nilai apa yang paling penting buatmu dalam pertemanan?",
+      "d": 2
+    },
+    {
+      "q": "Apa hal kecil yang membuatmu merasa aman?",
+      "d": 2
+    },
+    {
+      "q": "Kapan kamu merasa paling menjadi dirimu sendiri?",
+      "d": 2
+    },
+    {
+      "q": "Harapan yang sedang kamu simpan diam-diam?",
+      "d": 2
+    },
+    {
+      "q": "Apa yang ingin orang lebih pahami tentang dirimu?",
+      "d": 2
+    },
+    {
+      "q": "Hal apa yang sedang kamu pelajari untuk diterima?",
+      "d": 2
+    },
+    {
+      "q": "Apa definisi sukses yang terasa benar buatmu?",
+      "d": 2
+    },
+    {
+      "q": "Dukungan seperti apa yang paling nyaman kamu terima?",
+      "d": 2
+    },
+    {
+      "q": "Ketakutan kecil yang ingin kamu hadapi pelan-pelan?",
+      "d": 2
+    },
+    {
+      "q": "Apa yang membantumu melewati hari yang berat?",
+      "d": 2
+    },
+    {
+      "q": "Kapan terakhir kali kamu merasa berani?",
+      "d": 2
+    },
+    {
+      "q": "Apa harapanmu yang ingin kamu rawat tahun ini?",
+      "d": 2
+    },
+    {
+      "q": "Bagaimana kamu tahu bahwa seseorang sungguh mendengarkanmu?",
+      "d": 2
+    },
+    {
+      "q": "Nilai hidup apa yang tidak ingin kamu kompromikan?",
+      "d": 3
+    },
+    {
+      "q": "Apa arti memaafkan menurutmu?",
+      "d": 3
+    },
+    {
+      "q": "Perubahan apa yang sedang kamu usahakan dalam diri?",
+      "d": 3
+    },
+    {
+      "q": "Apa batasan yang penting untuk kamu jaga?",
+      "d": 3
+    },
+    {
+      "q": "Apa yang ingin kamu tinggalkan sebagai kebaikan?",
+      "d": 3
+    },
+    {
+      "q": "Pelajaran hidup apa yang paling mengubahmu?",
+      "d": 3
+    },
+    {
+      "q": "Kalau bisa mengirim pesan pada dirimu di masa depan, apa pesannya?",
+      "d": 3
+    }
+  ]
+}

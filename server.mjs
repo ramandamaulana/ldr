@@ -1,56 +1,74 @@
 import { createServer } from 'node:http';
-import { readFile } from 'node:fs/promises';
-import { dirname, join } from 'node:path';
+import { readFile, stat } from 'node:fs/promises';
+import { extname, join, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const root = dirname(fileURLToPath(import.meta.url));
+const root = fileURLToPath(new URL('.', import.meta.url));
+const dist = resolve(root, 'dist');
 
 async function loadEnvFile() {
-  try {
-    const contents = await readFile(join(root, '.env.local'), 'utf8');
-    for (const line of contents.split(/\r?\n/)) {
-      const trimmed = line.trim();
-      if (!trimmed || trimmed.startsWith('#')) continue;
-      const i = trimmed.indexOf('=');
-      if (i < 1) continue;
-      const name = trimmed.slice(0, i).trim();
-      let value = trimmed.slice(i + 1).trim();
-      if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) value = value.slice(1, -1);
-      if (!process.env[name]) process.env[name] = value;
-    }
-  } catch { /* Environment variables may be supplied by the hosting service. */ }
+  for (const file of ['.env.local', '.env']) {
+    try {
+      const contents = await readFile(join(root, file), 'utf8');
+      for (const line of contents.split(/\r?\n/)) {
+        const entry = line.trim();
+        if (!entry || entry.startsWith('#')) continue;
+        const splitAt = entry.indexOf('=');
+        if (splitAt < 1) continue;
+        const name = entry.slice(0, splitAt).trim();
+        let value = entry.slice(splitAt + 1).trim();
+        if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) value = value.slice(1, -1);
+        if (!process.env[name]) process.env[name] = value;
+      }
+    } catch { /* Hosted deployments inject environment variables directly. */ }
+  }
 }
 
 await loadEnvFile();
 
-const server = createServer(async (req, res) => {
-  const pathname = new URL(req.url, 'http://localhost').pathname;
-  res.setHeader('X-Content-Type-Options', 'nosniff');
-  if (pathname === '/.well-known/ldr-config') {
-    // Only browser-safe values are exposed. Never place a Supabase secret/service_role key here.
-    res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
-    res.end(JSON.stringify({ url: process.env.SUPABASE_URL || '', key: process.env.SUPABASE_PUBLISHABLE_KEY || process.env.SUPABASE_ANON_KEY || '' }));
-    return;
+const contentTypes = { '.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.mjs':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.ico':'image/x-icon','.woff2':'font/woff2' };
+const server = createServer(async (request, response) => {
+  response.setHeader('X-Content-Type-Options','nosniff');
+  response.setHeader('X-Frame-Options','DENY');
+  response.setHeader('Referrer-Policy','strict-origin-when-cross-origin');
+  response.setHeader('Permissions-Policy','camera=(), microphone=(), geolocation=()');
+  const url = new URL(request.url || '/', 'http://localhost');
+  if (url.pathname === '/healthz') {
+    response.writeHead(200, { 'Content-Type':'text/plain; charset=utf-8','Cache-Control':'no-store' });
+    response.end('ok'); return;
   }
-  if (pathname === '/setup.sql') {
+  if (url.pathname === '/.well-known/ldr-config') {
+    response.writeHead(200, { 'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store' });
+    response.end(JSON.stringify({ url:process.env.SUPABASE_URL || '', key:process.env.SUPABASE_PUBLISHABLE_KEY || process.env.SUPABASE_ANON_KEY || '' })); return;
+  }
+  if (url.pathname === '/setup.sql') {
     try {
-      const sql = await readFile(join(root, 'setup.sql'));
-      res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8', 'Content-Disposition': 'attachment; filename="setup.sql"' });
-      res.end(sql);
-    } catch { res.writeHead(404); res.end('setup.sql not found'); }
+      const sql = await readFile(join(root,'setup.sql'));
+      response.writeHead(200, { 'Content-Type':'text/plain; charset=utf-8','Content-Disposition':'attachment; filename="setup.sql"','Cache-Control':'no-store' });
+      response.end(sql);
+    } catch { response.writeHead(404); response.end('setup.sql belum tersedia'); }
     return;
   }
-  if (pathname === '/' || pathname === '/index.html') {
+  let relative;
+  try { relative = decodeURIComponent(url.pathname).replace(/^\/+/, ''); } catch { response.writeHead(400); response.end('Bad request'); return; }
+  let target = resolve(dist, relative || 'index.html');
+  if (target !== dist && !target.startsWith(dist + sep)) { response.writeHead(404); response.end('Not found'); return; }
+  try {
+    const metadata = await stat(target);
+    if (metadata.isDirectory()) target = join(target,'index.html');
+    const body = await readFile(target);
+    const ext = extname(target);
+    response.writeHead(200, { 'Content-Type':contentTypes[ext] || 'application/octet-stream', 'Cache-Control':ext==='.html'?'no-cache':'public, max-age=31536000, immutable' });
+    response.end(body);
+  } catch {
+    if (extname(url.pathname)) { response.writeHead(404); response.end('Not found'); return; }
     try {
-      const html = await readFile(join(root, 'index.html'));
-      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-cache' });
-      res.end(html);
-    } catch { res.writeHead(500); res.end('index.html not found'); }
-    return;
+      const html = await readFile(join(dist,'index.html'));
+      response.writeHead(200, { 'Content-Type':contentTypes['.html'], 'Cache-Control':'no-cache' });
+      response.end(html);
+    } catch { response.writeHead(503); response.end('Aplikasi belum dibuild. Jalankan npm run build.'); }
   }
-  res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
-  res.end('Not found');
 });
 
 const port = Number(process.env.PORT || 3000);
-server.listen(port, '0.0.0.0', () => console.log(`Jauh Dekat ready at http://localhost:${port}`));
+server.listen(port,'0.0.0.0',()=>console.log(`Jauh Dekat ready on port ${port}`));
