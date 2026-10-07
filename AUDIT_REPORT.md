@@ -102,13 +102,13 @@ Migrasi database v2 sudah ditulis, tetapi **belum dijalankan pada project Supaba
 - `npm run build` — lulus; bundle dipecah per vendor.
 - `npm audit` — 0 vulnerability pada dependency tree.
 - `npm run test:e2e` — 2 tes lulus memakai dua BrowserContext terpisah dan viewport mobile. Browser lokal Chrome digunakan melalui `CHROME_PATH` karena unduhan browser Playwright dari CDN timeout.
-- Smoke server produksi Node lokal: `/healthz`, `/`, `/.well-known/ldr-config`, dan `/setup.sql` merespons HTTP 200; app build dan dua environment key tersedia tanpa dicetak.
+- Smoke server produksi Node lokal sebelum audit lanjutan: `/healthz`, `/`, `/.well-known/ldr-config`, dan `/setup.sql` merespons HTTP 200; rute SQL publik kemudian dihapus.
 - `git diff --check` — lulus; hanya peringatan konversi line ending LF/CRLF.
 
 ## Belum terverifikasi / batasan
 
 - `setup.sql` **belum dieksekusi** pada Supabase; validasi SQL di atas adalah audit statis dan tes kontrak, bukan tes PostgreSQL live.
-- Google OAuth, anonymous sign-in di provider project, policies Realtime, dan redirect URL belum diuji terhadap project Supabase sungguhan.
+- OAuth/room/realtime live belum diuji end-to-end; Auth settings diperiksa kembali pada audit lanjutan.
 - Playwright saat ini menguji shell UI dalam dua konteks, bukan create/join/game/realtime dengan dua akun Supabase nyata. Race test terhadap transaksi PostgreSQL juga menunggu migration terpasang.
 - Migrasi sengaja tidak mengikat token UUID lama ke akun Google/tamu baru. Siapkan room v2 baru; jangan hapus tabel lama sebelum memutuskan retensi datanya.
 - Belum ada migrasi pertanyaan/kustom lama, tombol leave/reassign room, upload voice note/foto, generator AI, badge/unlock tema, leaderboard, atau rotasi mode otomatis.
@@ -125,6 +125,7 @@ Migrasi database v2 sudah ditulis, tetapi **belum dijalankan pada project Supaba
 - Join room mengembalikan kode error terstruktur untuk room tidak ditemukan/penuh dan rate limit. Ini membiarkan transaksi gagal tersimpan sehingga penghitung percobaan kode benar-benar bekerja.
 - Path JSONB posisi Ular Tangga dibentuk sebagai `text[]`, sesuai signature `jsonb_set` PostgreSQL.
 - `setup.sql` dan migration tetap identik setelah perbaikan.
+- Endpoint publik `/setup.sql` dihapus. Folder migration dan `.env` juga tidak disajikan server; `.env` lokal tetap ada tetapi dihapus dari Git index agar perubahan berikutnya tidak mengikutsertakannya.
 
 ### Status live yang diverifikasi
 
@@ -132,7 +133,10 @@ Migrasi database v2 sudah ditulis, tetapi **belum dijalankan pada project Supaba
 - Provider Google belum aktif (`google: false`); login Google masih memerlukan OAuth Client ID/Secret di dashboard, yang tidak boleh dikirim melalui chat.
 - RPC `get_my_room` belum tersedia pada project live (`PGRST202`), jadi guest create/join dan multiplayer berbasis RPC belum dapat lulus uji live.
 - Migrasi belum diterapkan. SQL Editor draft kosong dan tidak ada SQL parsial yang dijalankan.
-- SQL Editor tidak dapat menerima isi file lokal lewat jalur browser yang tersedia. Tidak ditemukan Supabase CLI atau `psql` lokal maupun kredensial koneksi database; menjalankan migrasi memerlukan pengguna menyalin `setup.sql` utuh ke SQL Editor atau menyediakan jalur CLI yang sudah terautentikasi.
+- Browser menolak akses file lokal dan memblokir akses localhost untuk pemindahan teks SQL ke editor. Belum ada jalur aman untuk meneruskan berkas lokal ke SQL Editor.
+- `npx --yes supabase --version` tersedia pada v2.120.0. `projects list` tidak menampilkan project ref runtime; `supabase link --project-ref ...` ditolak endpoint karena hak akun tidak mencukupi. `db push --dry-run` berhenti pada isu IPv6 sebelum koneksi database; folder project juga belum memiliki `config.toml`/project link dan tidak ada koneksi PostgreSQL.
+- Tidak ada jalur migrasi CLI yang berhak mengakses project runtime. SQL Editor tetap dapat digunakan oleh pemilik akun dengan menempelkan `setup.sql` utuh.
+- Endpoint `/setup.sql` production terverifikasi masih HTTP 200. Rute publik tersebut sudah dihapus dari `server.mjs`; build server lokal kini mengembalikan 404 untuk SQL, migration, dan `.env.local`. Production akan tetap menyajikan versi lama sampai deployment.
 
 ### Verifikasi terbaru
 
@@ -140,5 +144,9 @@ Migrasi database v2 sudah ditulis, tetapi **belum dijalankan pada project Supaba
 - `npm run lint`: lulus.
 - `npm run build`: lulus; hanya peringatan anotasi PURE dari dependency Zod.
 - `CHROME_PATH=... npm run test:e2e`: 2 tes lulus, dua browser context terpisah. Tes ini memverifikasi UI shell/mobile, bukan Auth atau Supabase live.
-- Smoke server produksi: `/healthz`, `/.well-known/ldr-config`, dan `/setup.sql` memberi HTTP 200. Nilai konfigurasi tidak dicetak.
+- Smoke server lama sebelum patch keamanan: `/healthz` dan `/setup.sql` HTTP 200. Nilai konfigurasi tidak dicetak.
+- Smoke server setelah patch keamanan: `/healthz` HTTP 200; `/setup.sql`, `/supabase/migrations/...`, dan `/.env.local` HTTP 404.
+- Supabase Auth settings live: `external.anonymous_users=true`, `external.google=false`.
+- `npx supabase projects list`: lima project terlihat, tetapi project ref yang dipakai aplikasi tidak termasuk. Link ditolak karena privilege.
+- Pemeriksaan `.env` saat ini dan dua revisi Git menunjukkan hanya URL serta publishable key dengan claim `role=anon`; tidak ditemukan assignment service-role/database password/Google secret maupun prefix secret key. `.env` lokal dipertahankan dan kini di-ignore/untrack.
 - Uji Google OAuth, sesi Auth live, create/join, RLS live, RPC game, dan realtime dua akun masih `BLOCKED` sampai migration v2 diterapkan dan provider Google dikonfigurasi.

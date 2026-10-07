@@ -41,14 +41,6 @@ const server = createServer(async (request, response) => {
     response.writeHead(200, { 'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store' });
     response.end(JSON.stringify({ url:process.env.SUPABASE_URL || '', key:process.env.SUPABASE_PUBLISHABLE_KEY || process.env.SUPABASE_ANON_KEY || '' })); return;
   }
-  if (url.pathname === '/setup.sql') {
-    try {
-      const sql = await readFile(join(root,'setup.sql'));
-      response.writeHead(200, { 'Content-Type':'text/plain; charset=utf-8','Content-Disposition':'attachment; filename="setup.sql"','Cache-Control':'no-store' });
-      response.end(sql);
-    } catch { response.writeHead(404); response.end('setup.sql belum tersedia'); }
-    return;
-  }
   let relative;
   try { relative = decodeURIComponent(url.pathname).replace(/^\/+/, ''); } catch { response.writeHead(400); response.end('Bad request'); return; }
   let target = resolve(dist, relative || 'index.html');

@@ -4,6 +4,7 @@ test-results/
 playwright-report/
 coverage/
 *.tsbuildinfo
+supabase/.temp/
 .env
 .env.*
 !.env.example
