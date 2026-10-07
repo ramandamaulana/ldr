@@ -24,7 +24,7 @@ Ruang main dan obrolan pasangan LDR. Frontend sekarang React + TypeScript + Vite
 
 Untuk Web Service Node yang melayani app hasil build, gunakan:
 
-- **Build Command:** `npm install && npm run build`
+- **Build Command:** `npm ci && npm run build`
 - **Start Command:** `npm start`
 - **Environment:** `SUPABASE_URL` dan `SUPABASE_PUBLISHABLE_KEY`
 
@@ -71,6 +71,13 @@ Tambahkan objek ke `src/features/games/questions.json`:
 ```
 
 `d` bernilai `1` (ringan), `2` (sedang), atau `3` (dalam). Pertanyaan tambahan untuk Kuis Kita bisa dimasukkan dari panel game dan disimpan bersama room. Pertanyaan yang sudah dijawab dicatat di `room_question_uses` supaya kartu berikutnya tidak berulang.
+
+## Troubleshooting login dan room
+
+- Jika login tamu gagal, aktifkan **Authentication → Sign In / Providers → Anonymous Sign-Ins** di Supabase.
+- Jika login Google gagal, aktifkan provider Google di Supabase, isi OAuth Client ID/Secret, izinkan URL aplikasi di **Authentication → URL Configuration → Redirect URLs**, dan daftarkan callback `https://PROJECT-REF.supabase.co/auth/v1/callback` pada Google OAuth client.
+- Jika membuat atau memuat room mendapat `PGRST202`, jalankan `setup.sql` terbaru di Supabase SQL Editor. Frontend dan database harus sama-sama v2.
+- Jangan bagikan Google OAuth Client Secret, Supabase service-role key, atau token sesi di chat maupun repository.
 
 ## Batasan yang diketahui
 
