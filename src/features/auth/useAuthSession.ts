@@ -11,19 +11,23 @@ export function useAuthSession() {
   useEffect(() => {
     let live = true;
     let unsubscribe = () => {};
+    let authRevision = 0;
     getSupabase().then((supabase) => {
       if (!live) return;
       setClient(supabase);
       const { data } = supabase.auth.onAuthStateChange((_event, session) => {
         if (!live) return;
+        authRevision += 1;
         setUser(session?.user ?? null);
         setReady(true);
       });
       unsubscribe = () => data.subscription.unsubscribe();
+      const revisionAtRead = authRevision;
       return supabase.auth.getSession().then(({ data: sessionData, error: sessionError }) => {
         if (!live) return;
         if (sessionError) setError(sessionError.message);
-        setUser(sessionData.session?.user ?? null);
+        // A newer SIGNED_IN/SIGNED_OUT event is authoritative over this bootstrap read.
+        if (revisionAtRead === authRevision) setUser(sessionData.session?.user ?? null);
         setReady(true);
       });
     }).catch((reason: unknown) => { if (live) { setError(messageOf(reason)); setReady(true); } });

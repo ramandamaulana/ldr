@@ -55,10 +55,22 @@ export function useRoomData(client:SupabaseClient|null,user:User|null,status:Con
     return()=>{alive=false;setStatus('offline');void client.removeChannel(channel)};
   },[client,user?.id,room?.room.id,queryClient,setStatus]);
   useEffect(()=>{
-    const offline=()=>setStatus('offline');const onlineAgain=()=>setStatus('reconnecting');
-    window.addEventListener('offline',offline);window.addEventListener('online',onlineAgain);
-    return()=>{window.removeEventListener('offline',offline);window.removeEventListener('online',onlineAgain)};
-  },[setStatus]);
+    const offline=()=>setStatus('offline');
+    const recover=()=>{
+      setStatus('reconnecting');
+      if(!user)return;
+      void queryClient.invalidateQueries({queryKey:['my-room',user.id]});
+      if(room){
+        void queryClient.invalidateQueries({queryKey:['memories',room.room.id]});
+        void queryClient.invalidateQueries({queryKey:['used-questions',room.room.id]});
+        void queryClient.invalidateQueries({queryKey:['game-history',room.room.id]});
+      }
+    };
+    const becameVisible=()=>{if(document.visibilityState==='visible'&&navigator.onLine)recover()};
+    window.addEventListener('offline',offline);window.addEventListener('online',recover);
+    document.addEventListener('visibilitychange',becameVisible);
+    return()=>{window.removeEventListener('offline',offline);window.removeEventListener('online',recover);document.removeEventListener('visibilitychange',becameVisible)};
+  },[queryClient,room?.room.id,setStatus,user?.id]);
 
   return {roomQuery,room,memoriesQuery,historyQuery,usedQuery,online};
 }

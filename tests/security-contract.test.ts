@@ -13,6 +13,11 @@ describe('Supabase authorization contract',()=>{
     expect(sql).toMatch(/interval '15 minutes'/);
   });
 
+  it('commits failed join attempts so the per-user room-code limit can take effect',()=>{
+    expect(sql).toMatch(/attempts=attempts\+1[\s\S]*if not found then return jsonb_build_object\('error_code','room_not_found'\)/);
+    expect(sql).toMatch(/attempts>=10 then return jsonb_build_object\('error_code','join_rate_limited'\)/);
+  });
+
   it('enables RLS and prevents anonymous execution of old token RPCs',()=>{
     expect(sql.match(/enable row level security/g)?.length).toBeGreaterThanOrEqual(7);
     expect(sql).toMatch(/revoke all on function %s from public,anon,authenticated/);
@@ -26,6 +31,8 @@ describe('Supabase authorization contract',()=>{
     expect(sql).toMatch(/from public\.game_sessions where id=p_session_id for update/);
     expect(sql).toMatch(/if p_idempotency_key is null/);
     expect(sql).toMatch(/random\(\)\*6/);
+    expect(sql).toMatch(/jsonb_set\(state_json,array\['positions',k\]/);
+    expect(sql).not.toMatch(/jsonb_set\(state_json,'\{positions,'\|\|k/);
   });
 
   it('projects the guess answer privately until the second player responds',()=>{

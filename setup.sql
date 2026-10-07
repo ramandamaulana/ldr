@@ -158,14 +158,14 @@ begin
   select * into limit_row from public.room_join_attempts where user_id=uid for update;
   if limit_row.window_started_at<now()-interval '15 minutes' then
     update public.room_join_attempts set window_started_at=now(),attempts=0 where user_id=uid;
-  elsif limit_row.attempts>=10 then raise exception 'Terlalu banyak percobaan kode. Coba lagi 15 menit ya.' using errcode='P0001';
+  elsif limit_row.attempts>=10 then return jsonb_build_object('error_code','join_rate_limited');
   end if;
   update public.room_join_attempts set attempts=attempts+1 where user_id=uid;
   select * into r from public.rooms where code=upper(trim(coalesce(p_code,''))) and status in ('waiting','ready') for update;
-  if not found then raise exception 'Kode room tidak ditemukan atau sudah ditutup.'; end if;
+  if not found then return jsonb_build_object('error_code','room_not_found'); end if;
   if exists(select 1 from public.room_members where room_id=r.id and user_id=uid) then raise exception 'Kamu sudah ada di room ini.'; end if;
   select count(*) into member_count from public.room_members where room_id=r.id;
-  if member_count >= 2 then raise exception 'Room ini sudah penuh. Isinya memang cuma berdua 💗'; end if;
+  if member_count >= 2 then return jsonb_build_object('error_code','room_full'); end if;
   seat_no := case when exists(select 1 from public.room_members where room_id=r.id and seat=0) then 1 else 0 end;
   insert into public.profiles(id,display_name,avatar) values(uid,trim(p_display_name),left(coalesce(p_avatar,'🐻'),8))
     on conflict(id) do update set display_name=excluded.display_name,avatar=excluded.avatar,updated_at=now();
@@ -298,7 +298,7 @@ begin
     rawpos:=landed;
     if landed in (4,9,20,28,40,63,71) then landed:=case landed when 4 then 14 when 9 then 31 when 20 then 38 when 28 then 84 when 40 then 59 when 63 then 81 else 91 end;
     elsif landed in (17,54,62,64,87,93,95,99) then landed:=case landed when 17 then 7 when 54 then 34 when 62 then 19 when 64 then 60 when 87 then 24 when 93 then 73 when 95 then 75 else 78 end; end if;
-    state_json:=jsonb_set(state_json,'{positions,'||k||'}',to_jsonb(landed),true); state_json:=jsonb_set(state_json,'{last_roll}',to_jsonb(roll_no),true);
+    state_json:=jsonb_set(state_json,array['positions',k],to_jsonb(landed),true); state_json:=jsonb_set(state_json,'{last_roll}',to_jsonb(roll_no),true);
     if landed=100 then state_json:=jsonb_set(state_json,'{winner}',to_jsonb(uid),true); gs.status:='round_complete'; update public.rooms set xp=xp+10,streak=case when last_played_on=current_date then streak when last_played_on=current_date-1 then streak+1 else 1 end,last_played_on=current_date,updated_at=now() where id=gs.room_id;
     elsif rawpos in (17,54,62,64,87,93,95,99) then
       state_json:=jsonb_set(state_json,'{punishment}',jsonb_build_object('id',extensions.gen_random_uuid(),'status','active','user_id',uid,'from',rawpos,'to',landed,'prompt','Kena ular! Ceritakan satu hal kecil yang kamu kangenin dari pasanganmu 💌'),true);

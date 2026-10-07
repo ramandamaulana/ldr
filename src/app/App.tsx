@@ -58,7 +58,10 @@ export function App() {
     const {data,error}=action==='create'
       ?await client.rpc('create_ldr_room',{p_display_name:name.trim(),p_avatar:avatar,p_ldr_since:ldrSince||null})
       :await client.rpc('join_ldr_room',{p_code:roomCode.trim().toUpperCase(),p_display_name:name.trim(),p_avatar:avatar});
-    if(error)throw error;const result=data as {room_id:string;code:string};
+    if(error)throw error;const result=data as {room_id?:string;code?:string;error_code?:string};
+    if(result?.error_code==='join_rate_limited')throw new Error('Terlalu banyak percobaan kode. Coba lagi sekitar 15 menit ya.');
+    if(result?.error_code==='room_not_found')throw new Error('Kode room tidak ditemukan atau room sudah ditutup.');
+    if(result?.error_code==='room_full')throw new Error('Room ini sudah penuh. Isinya memang cuma berdua 💗');
     if(!result?.room_id||!result.code)throw new Error('Server belum mengirim kode room yang valid.');
     setRoomCode(result.code);await refresh();return result;
   },onSuccess:async(result)=>{notify(`Room ${result.code} siap! Kode cuma untuk kalian berdua 💗`);await announce()},onError:(e)=>notify(messageOf(e))});
@@ -82,6 +85,7 @@ export function App() {
     const result=await runRpc('submit_ldr_action',{p_session_id:room.game.id,p_idempotency_key:idempotencyKey,p_action_type:action,p_payload:payload});return result;
   },onSuccess:async(...result)=>{const variables=result[1] as {signature:string};pendingActionIds.current.delete(variables.signature);setText('');setChoice(null);await refresh();await announce()},onError:(e)=>{notify(messageOf(e));void refresh()}});
   const pendingActionIds=useRef(new Map<string,string>());
+  const switchingGame=useRef(false);
   const sendAction=(action:string,payload:Record<string,unknown>)=>{const signature=JSON.stringify([room?.game?.id,action,payload]);let idempotencyKey=pendingActionIds.current.get(signature);if(!idempotencyKey){idempotencyKey=crypto.randomUUID();pendingActionIds.current.set(signature,idempotencyKey)}actionMutation.mutate({action,payload,idempotencyKey,signature})};
   const closeMutation=useMutation({mutationFn:async()=>{
     if(!room?.game) return;const {error}=await client!.rpc('close_ldr_game',{p_session_id:room.game.id});if(error)throw error;
@@ -166,7 +170,7 @@ export function App() {
   const todayText=dailyQuestion?.prompt||'Apa hal kecil yang bikin harimu lebih enak hari ini?';
   const pairedChoices=game?.game_type==='would_you_rather'&&allAnswered;
   const matches=pairedChoices&&answers[user.id]===answers[partner!.id];
-  const chooseGame=(id:GameType,dailyPrompt?:string,dailyId?:string)=>{void(async()=>{try{if(room?.game)await closeMutation.mutateAsync();startMutation.mutate({game:id,dailyPrompt,dailyId})}catch(error){notify(messageOf(error))}})()};
+  const chooseGame=(id:GameType,dailyPrompt?:string,dailyId?:string)=>{if(switchingGame.current||startMutation.isPending||closeMutation.isPending)return; switchingGame.current=true; void(async()=>{try{if(room?.game)await closeMutation.mutateAsync();await startMutation.mutateAsync({game:id,dailyPrompt,dailyId})}catch(error){notify(messageOf(error))}finally{switchingGame.current=false}})()};
   const saveMemory=()=>{if(!game)return;const saved=`${prompt}${Object.values(answers).map((value)=>` · ${String(value)}`).join('')}`;memoryMutation.mutate(saved.slice(0,800))};
   const setAsyncMode=async()=>{const {error}=await client.rpc('update_ldr_settings',{p_settings:{async:!settingsAsync,deep_enabled:filterDeep,meet_date:meetDate||null,ldr_since:ldrSince||null}});if(error)notify(messageOf(error));else{notify(!settingsAsync?'Mode asinkron aktif 🌙':'Mode sinkron aktif ⚡');await refresh();await announce()}};
   const addQuestion=(event:FormEvent)=>{event.preventDefault();if(customQuestion.trim())customQuestionMutation.mutate(customQuestion.trim())};

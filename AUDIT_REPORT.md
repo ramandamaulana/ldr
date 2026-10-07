@@ -98,7 +98,7 @@ Migrasi database v2 sudah ditulis, tetapi **belum dijalankan pada project Supaba
 
 - `npm run typecheck` — lulus.
 - `npm run lint` — lulus.
-- `npm test` — 7 tes lulus (bank/registry, aturan Tic-Tac-Toe, kontrak RLS/membership/idempotency/projection).
+- `npm test` — saat audit lanjutan 12 tes lulus (bank/registry, aturan Tic-Tac-Toe, kontrak RLS/membership/idempotency/projection dan join throttle).
 - `npm run build` — lulus; bundle dipecah per vendor.
 - `npm audit` — 0 vulnerability pada dependency tree.
 - `npm run test:e2e` — 2 tes lulus memakai dua BrowserContext terpisah dan viewport mobile. Browser lokal Chrome digunakan melalui `CHROME_PATH` karena unduhan browser Playwright dari CDN timeout.
@@ -114,3 +114,31 @@ Migrasi database v2 sudah ditulis, tetapi **belum dijalankan pada project Supaba
 - Belum ada migrasi pertanyaan/kustom lama, tombol leave/reassign room, upload voice note/foto, generator AI, badge/unlock tema, leaderboard, atau rotasi mode otomatis.
 - Join throttling sekarang per Auth user, belum per-IP. Room code 6 karakter tetap harus dibagikan privat.
 - Karena fungsi lama dicabut, jalankan migrasi dan deploy build baru secara terkoordinasi. Simpan backup database terlebih dahulu dan siapkan project uji sebelum menjalankan SQL pada room live.
+
+## Audit lanjutan — 7 Oktober 2026
+
+### Perbaikan lokal
+
+- Bootstrap session tidak lagi menimpa event `SIGNED_IN`/`SIGNED_OUT` yang datang setelah pembacaan `getSession()` dimulai.
+- Aksi ganti mode memakai satu guard dan menunggu mutasi start selesai; klik cepat tidak mengirim beberapa permintaan start dari UI yang sama.
+- Saat jaringan pulih atau tab kembali terlihat, room, riwayat, Memory Jar, dan pertanyaan terpakai langsung diminta ulang dari server.
+- Join room mengembalikan kode error terstruktur untuk room tidak ditemukan/penuh dan rate limit. Ini membiarkan transaksi gagal tersimpan sehingga penghitung percobaan kode benar-benar bekerja.
+- Path JSONB posisi Ular Tangga dibentuk sebagai `text[]`, sesuai signature `jsonb_set` PostgreSQL.
+- `setup.sql` dan migration tetap identik setelah perbaikan.
+
+### Status live yang diverifikasi
+
+- Anonymous Sign-Ins aktif (`anonymous_users: true`).
+- Provider Google belum aktif (`google: false`); login Google masih memerlukan OAuth Client ID/Secret di dashboard, yang tidak boleh dikirim melalui chat.
+- RPC `get_my_room` belum tersedia pada project live (`PGRST202`), jadi guest create/join dan multiplayer berbasis RPC belum dapat lulus uji live.
+- Migrasi belum diterapkan. SQL Editor draft kosong dan tidak ada SQL parsial yang dijalankan.
+- SQL Editor tidak dapat menerima isi file lokal lewat jalur browser yang tersedia. Tidak ditemukan Supabase CLI atau `psql` lokal maupun kredensial koneksi database; menjalankan migrasi memerlukan pengguna menyalin `setup.sql` utuh ke SQL Editor atau menyediakan jalur CLI yang sudah terautentikasi.
+
+### Verifikasi terbaru
+
+- `npm test -- --reporter=dot`: 12 tes lulus.
+- `npm run lint`: lulus.
+- `npm run build`: lulus; hanya peringatan anotasi PURE dari dependency Zod.
+- `CHROME_PATH=... npm run test:e2e`: 2 tes lulus, dua browser context terpisah. Tes ini memverifikasi UI shell/mobile, bukan Auth atau Supabase live.
+- Smoke server produksi: `/healthz`, `/.well-known/ldr-config`, dan `/setup.sql` memberi HTTP 200. Nilai konfigurasi tidak dicetak.
+- Uji Google OAuth, sesi Auth live, create/join, RLS live, RPC game, dan realtime dua akun masih `BLOCKED` sampai migration v2 diterapkan dan provider Google dikonfigurasi.
